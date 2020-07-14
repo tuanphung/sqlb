@@ -1,4 +1,4 @@
-package main
+package sqlb
 
 func Raw(value string) RawChain {
 	return ChainBuilder{}.Raw(value)
