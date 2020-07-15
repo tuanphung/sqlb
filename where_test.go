@@ -26,34 +26,3 @@ func TestBasicWhere(t *testing.T) {
 	assert.Equal(t, 0, len(args2), "they should be equal")
 	assert.Equal(t, "error GetExpr IN: value is not []interface{}", err2.Error(), "they should be equal")
 }
-
-func TestEqWhere(t *testing.T) {
-	query := Eq{"foo", "bar"}
-
-	sql, args, _ := query.GetExpr()
-	assert.Equal(t, "foo = ?", sql, "they should be equal")
-	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
-}
-
-func TestNotEqWhere(t *testing.T) {
-	query := NotEq{"foo", "bar"}
-
-	sql, args, _ := query.GetExpr()
-	assert.Equal(t, "foo <> ?", sql, "they should be equal")
-	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
-}
-
-func TestInExpr(t *testing.T) {
-	query := In{"foo", []interface{}{"bar"}}
-	sql, args, _ := query.GetExpr()
-	assert.Equal(t, "foo IN (?)", sql, "they should be equal")
-	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
-}
-
-func TestAndWhere(t *testing.T) {
-	query := And{Eq{"foo", "bar"}}
-
-	sql, args, _ := query.GetExpr()
-	assert.Equal(t, "foo = ?", sql, "they should be equal")
-	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
-}
