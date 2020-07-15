@@ -6,16 +6,6 @@ import (
 	"strings"
 )
 
-type WhereStatement struct {
-	Parts []WherePart
-}
-
-func (s WhereStatement) ToSql() (string, []interface{}, error) {
-	sql, args, err := And(s.Parts).GetExpr()
-	sql = fmt.Sprintf("WHERE %s", sql)
-	return sql, args, err
-}
-
 type WhereChain Chain
 
 func (c WhereChain) ToSql() (string, []interface{}, error) {
@@ -35,17 +25,17 @@ const (
 	Like           Operator = "LIKE"
 )
 
-type WherePart interface {
+type Expr interface {
 	GetExpr() (string, []interface{}, error)
 }
 
-type BasicWhere struct {
+type SingleExpr struct {
 	Column   string
 	Operator Operator
 	Value    interface{}
 }
 
-func (o BasicWhere) GetExpr() (string, []interface{}, error) {
+func (o SingleExpr) GetExpr() (string, []interface{}, error) {
 	if o.Operator == "IN" {
 		if array, ok := o.Value.([]interface{}); ok {
 			variables := []string{}
@@ -68,16 +58,16 @@ const (
 	orOperator  ConjunctionOperator = "OR"
 )
 
-type ConjunctionWhere struct {
+type Conjunction struct {
 	Operator ConjunctionOperator
-	Parts    []WherePart
+	Exprs    []Expr
 }
 
-func (o ConjunctionWhere) GetExpr() (string, []interface{}, error) {
+func (o Conjunction) GetExpr() (string, []interface{}, error) {
 	statements := []string{}
 	finalArgs := []interface{}{}
 
-	for _, query := range o.Parts {
+	for _, query := range o.Exprs {
 		statement, args, _ := query.GetExpr()
 
 		statements = append(statements, statement)
@@ -92,21 +82,13 @@ func (o ConjunctionWhere) GetExpr() (string, []interface{}, error) {
 	return fmt.Sprintf(format, strings.Join(statements, fmt.Sprintf(" %s ", o.Operator))), finalArgs, nil
 }
 
-func AndWhere(parts []WherePart) ConjunctionWhere {
-	return ConjunctionWhere{andOperator, parts}
-}
-
-func OrWhere(parts []WherePart) ConjunctionWhere {
-	return ConjunctionWhere{orOperator, parts}
-}
-
 type Eq struct {
 	Column string
 	Value  interface{}
 }
 
 func (o Eq) GetExpr() (string, []interface{}, error) {
-	return BasicWhere{o.Column, Equal, o.Value}.GetExpr()
+	return SingleExpr{o.Column, Equal, o.Value}.GetExpr()
 }
 
 type NotEq struct {
@@ -115,19 +97,19 @@ type NotEq struct {
 }
 
 func (o NotEq) GetExpr() (string, []interface{}, error) {
-	return BasicWhere{o.Column, Equal, o.Value}.GetExpr()
+	return SingleExpr{o.Column, Equal, o.Value}.GetExpr()
 }
 
-type And []WherePart
+type And []Expr
 
 func (o And) GetExpr() (string, []interface{}, error) {
-	conj := AndWhere(o)
+	conj := Conjunction{andOperator, o}
 	return conj.GetExpr()
 }
 
-type Or []WherePart
+type Or []Expr
 
 func (o Or) GetExpr() (string, []interface{}, error) {
-	conj := OrWhere(o)
+	conj := Conjunction{orOperator, o}
 	return conj.GetExpr()
 }

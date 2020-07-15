@@ -1,18 +1,5 @@
 package sqlb
 
-import (
-	"fmt"
-	"strings"
-)
-
-type SelectStatement struct {
-	Columns []string
-}
-
-func (s SelectStatement) ToSql() (string, []interface{}, error) {
-	return fmt.Sprintf("%s %s", "SELECT", strings.Join(s.Columns, ", ")), nil, nil
-}
-
 type SelectChain Chain
 
 func (c SelectChain) ToSql() (string, []interface{}, error) {

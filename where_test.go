@@ -7,7 +7,7 @@ import (
 )
 
 func TestBasicWhere(t *testing.T) {
-	query1 := &BasicWhere{
+	query1 := &SingleExpr{
 		Column:   "foo",
 		Operator: Equal,
 		Value:    "bar 1",

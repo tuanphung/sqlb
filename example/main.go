@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	sq "github.com/Masterminds/squirrel"
 	sb "github.com/tuanphung/sqlb"
 )
 
@@ -17,12 +16,12 @@ func main() {
 }
 
 func testSQ() {
-	users := sq.Select("*").From("users").Where(sq.And{sq.Eq{"a": "b"}, sq.Or{sq.Eq{"c": "d", "e": "f"}, sq.Eq{"g": "h"}}})
+	// users := sq.Select("*").From("users").Where(sq.And{sq.Eq{"a": "b"}, sq.Or{sq.Eq{"c": "d", "e": "f"}, sq.Eq{"g": "h"}}})
 
-	sql, args, _ := users.ToSql()
+	// sql, args, _ := users.ToSql()
 
-	fmt.Println(sql)
-	fmt.Println(args...)
+	// fmt.Println(sql)
+	// fmt.Println(args...)
 }
 
 func testSB() {
