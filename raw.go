@@ -1,7 +1,7 @@
 package sqlb
 
 type RawStatement struct {
-	Raw string
+	Raw  string
 	Args []interface{}
 }
 

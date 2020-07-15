@@ -63,3 +63,13 @@ func (b ChainBuilder) From(tables ...string) FromChain {
 	chain.statements = append(chain.statements, statement)
 	return FromChain(chain)
 }
+
+func (b ChainBuilder) Where(parts ...WherePart) WhereChain {
+	statement := WhereStatement{
+		Parts: parts,
+	}
+
+	chain := b.Chain
+	chain.statements = append(chain.statements, statement)
+	return WhereChain(chain)
+}

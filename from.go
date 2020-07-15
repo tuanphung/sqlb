@@ -22,3 +22,7 @@ func (c FromChain) ToSql() (string, []interface{}, error) {
 func (c FromChain) Raw(raw string, args ...interface{}) RawChain {
 	return ChainBuilder{Chain(c)}.Raw(raw, args...)
 }
+
+func (c FromChain) Where(parts ...WherePart) WhereChain {
+	return ChainBuilder{Chain(c)}.Where(parts...)
+}
