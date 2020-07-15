@@ -15,14 +15,14 @@ func (c WhereChain) ToSql() (string, []interface{}, error) {
 type Operator string
 
 const (
-	Equal          Operator = "="
-	NotEqual       Operator = "<>"
-	Greater        Operator = ">"
-	GreaterOrEqual Operator = ">="
-	Less           Operator = "<"
-	LessOrEqual    Operator = "<="
-	In             Operator = "IN"
-	Like           Operator = "LIKE"
+	EqualOperator          Operator = "="
+	NotEqualOperator       Operator = "<>"
+	GreaterOperator        Operator = ">"
+	GreaterOrEqualOperator Operator = ">="
+	LessOperator           Operator = "<"
+	LessOrEqualOperator    Operator = "<="
+	InOperator             Operator = "IN"
+	LikeOperator           Operator = "LIKE"
 )
 
 type Expr interface {
@@ -54,8 +54,8 @@ func (o SingleExpr) GetExpr() (string, []interface{}, error) {
 type ConjunctionOperator string
 
 const (
-	andOperator ConjunctionOperator = "AND"
-	orOperator  ConjunctionOperator = "OR"
+	AndOperator ConjunctionOperator = "AND"
+	OrOperator  ConjunctionOperator = "OR"
 )
 
 type Conjunction struct {
@@ -88,7 +88,7 @@ type Eq struct {
 }
 
 func (o Eq) GetExpr() (string, []interface{}, error) {
-	return SingleExpr{o.Column, Equal, o.Value}.GetExpr()
+	return SingleExpr{o.Column, EqualOperator, o.Value}.GetExpr()
 }
 
 type NotEq struct {
@@ -97,19 +97,28 @@ type NotEq struct {
 }
 
 func (o NotEq) GetExpr() (string, []interface{}, error) {
-	return SingleExpr{o.Column, Equal, o.Value}.GetExpr()
+	return SingleExpr{o.Column, NotEqualOperator, o.Value}.GetExpr()
+}
+
+type In struct {
+	Column string
+	Value  []interface{}
+}
+
+func (o In) GetExpr() (string, []interface{}, error) {
+	return SingleExpr{o.Column, InOperator, o.Value}.GetExpr()
 }
 
 type And []Expr
 
 func (o And) GetExpr() (string, []interface{}, error) {
-	conj := Conjunction{andOperator, o}
+	conj := Conjunction{AndOperator, o}
 	return conj.GetExpr()
 }
 
 type Or []Expr
 
 func (o Or) GetExpr() (string, []interface{}, error) {
-	conj := Conjunction{orOperator, o}
+	conj := Conjunction{OrOperator, o}
 	return conj.GetExpr()
 }

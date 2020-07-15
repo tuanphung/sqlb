@@ -56,7 +56,7 @@ func TestWhereStatement(t *testing.T) {
 		Exprs: []Expr{
 			SingleExpr{
 				Column:   "foo",
-				Operator: Equal,
+				Operator: EqualOperator,
 				Value:    "bar",
 			},
 		},
