@@ -51,6 +51,15 @@ func (e NotEq) ToExpr() (string, []interface{}, error) {
 	return fmt.Sprintf("%s <> ?", e.Column), []interface{}{e.Value}, nil
 }
 
+type Like struct {
+	Column string
+	Value  interface{}
+}
+
+func (e Like) ToExpr() (string, []interface{}, error) {
+	return fmt.Sprintf("%s LIKE ?", e.Column), []interface{}{e.Value}, nil
+}
+
 type In struct {
 	Column string
 	Value  []interface{}
