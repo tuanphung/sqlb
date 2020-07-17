@@ -2,8 +2,8 @@ package sqlb
 
 type SelectChain Chain
 
-func (c SelectChain) ToSql() (string, []interface{}, error) {
-	return Chain(c).ToSql()
+func (c SelectChain) ToExpr() (string, []interface{}, error) {
+	return Chain(c).ToExpr()
 }
 
 func (c SelectChain) Raw(raw string, args ...interface{}) RawChain {

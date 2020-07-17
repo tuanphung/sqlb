@@ -2,14 +2,14 @@ package sqlb
 
 import "strings"
 
-type Chain []Sqlizer
+type Chain []Statement
 
-func (c Chain) ToSql() (string, []interface{}, error) {
+func (c Chain) ToExpr() (string, []interface{}, error) {
 	parts := []string{}
 	aggregatedArgs := []interface{}{}
 
 	for _, s := range c {
-		sql, args, _ := s.ToSql()
+		sql, args, _ := s.ToExpr()
 		if sql != "" {
 			parts = append(parts, sql)
 			aggregatedArgs = append(aggregatedArgs, args...)
@@ -62,9 +62,9 @@ func (b ChainBuilder) From(tables ...string) FromChain {
 	return FromChain(chain)
 }
 
-func (b ChainBuilder) Where(parts ...Expr) WhereChain {
+func (b ChainBuilder) Where(exprs ...Expr) WhereChain {
 	statement := WhereStatement{
-		Exprs: parts,
+		Exprs: exprs,
 	}
 
 	chain := b.Chain

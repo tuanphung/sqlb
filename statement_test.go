@@ -11,7 +11,7 @@ func TestRawStatement(t *testing.T) {
 		Raw: "EXPLAIN",
 	}
 
-	sql, args, err := statement.ToSql()
+	sql, args, err := statement.ToExpr()
 	assert.Equal(t, "EXPLAIN", sql, "they should be equal")
 	assert.Equal(t, 0, len(args), "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
@@ -23,7 +23,7 @@ func TestRawStatementWithArgs(t *testing.T) {
 		Args: []interface{}{"1", 1},
 	}
 
-	sql, args, err := statement.ToSql()
+	sql, args, err := statement.ToExpr()
 	assert.Equal(t, "EXPLAIN", sql, "they should be equal")
 	assert.Equal(t, []interface{}{"1", 1}, args, "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
@@ -34,7 +34,7 @@ func TestSelectStatement(t *testing.T) {
 		Columns: []string{"a", "b"},
 	}
 
-	sql, args, err := statement.ToSql()
+	sql, args, err := statement.ToExpr()
 	assert.Equal(t, "SELECT a, b", sql, "they should be equal")
 	assert.Equal(t, 0, len(args), "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
@@ -45,7 +45,7 @@ func TestFromStatement(t *testing.T) {
 		Tables: []string{"a", "b"},
 	}
 
-	sql, args, err := statement.ToSql()
+	sql, args, err := statement.ToExpr()
 	assert.Equal(t, "FROM a, b", sql, "they should be equal")
 	assert.Equal(t, 0, len(args), "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
@@ -54,15 +54,14 @@ func TestFromStatement(t *testing.T) {
 func TestWhereStatement(t *testing.T) {
 	statement := WhereStatement{
 		Exprs: []Expr{
-			SingleExpr{
-				Column:   "foo",
-				Operator: EqualOperator,
-				Value:    "bar",
+			Eq{
+				Column: "foo",
+				Value:  "bar",
 			},
 		},
 	}
 
-	sql, args, err := statement.ToSql()
+	sql, args, err := statement.ToExpr()
 	assert.Equal(t, "WHERE foo = ?", sql, "they should be equal")
 	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
