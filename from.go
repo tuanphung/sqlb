@@ -13,3 +13,11 @@ func (c FromChain) Raw(raw string, args ...interface{}) RawChain {
 func (c FromChain) Where(parts ...Expr) WhereChain {
 	return ChainBuilder{Chain(c)}.Where(parts...)
 }
+
+func (c FromChain) Limit(limit int64) LimitChain {
+	return ChainBuilder{Chain(c)}.Limit(limit)
+}
+
+func (c FromChain) Offset(offset int64) OffsetChain {
+	return ChainBuilder{Chain(c)}.Offset(offset)
+}

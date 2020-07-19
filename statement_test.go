@@ -66,3 +66,25 @@ func TestWhereStatement(t *testing.T) {
 	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
 }
+
+func TestLimitStatement(t *testing.T) {
+	statement := LimitStatement{
+		Limit: 10,
+	}
+
+	sql, args, err := statement.ToExpr()
+	assert.Equal(t, "LIMIT 10", sql, "they should be equal")
+	assert.Equal(t, 0, len(args), "they should be equal")
+	assert.Equal(t, nil, err, "they should be equal")
+}
+
+func TestOffsetStatement(t *testing.T) {
+	statement := OffsetStatement{
+		Offset: 0,
+	}
+
+	sql, args, err := statement.ToExpr()
+	assert.Equal(t, "OFFSET 0", sql, "they should be equal")
+	assert.Equal(t, 0, len(args), "they should be equal")
+	assert.Equal(t, nil, err, "they should be equal")
+}

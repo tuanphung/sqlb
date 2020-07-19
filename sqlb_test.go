@@ -53,3 +53,9 @@ func TestRawSelectFromWhereOrWithArgs2(t *testing.T) {
 	assert.Equal(t, "EXPLAIN SELECT id, name, abc FROM table WHERE (foo = ? OR a = ?)", sql, "they should be equal")
 	assert.Equal(t, []interface{}{"bar", "b"}, args, "they should be equal")
 }
+
+func TestUsage1(t *testing.T) {
+	sql, args, _ := Raw("EXPLAIN").Select("id", "name", "abc").From("table").Where(Or{Eq{"foo", "bar"}, Eq{"a", "b"}}).Offset(0).Limit(10).ToExpr()
+	assert.Equal(t, "EXPLAIN SELECT id, name, abc FROM table WHERE (foo = ? OR a = ?) OFFSET 0 LIMIT 10", sql, "they should be equal")
+	assert.Equal(t, []interface{}{"bar", "b"}, args, "they should be equal")
+}

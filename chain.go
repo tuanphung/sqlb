@@ -71,3 +71,23 @@ func (b ChainBuilder) Where(exprs ...Expr) WhereChain {
 	chain = append(chain, statement)
 	return WhereChain(chain)
 }
+
+func (b ChainBuilder) Offset(offset int64) OffsetChain {
+	statement := OffsetStatement{
+		Offset: offset,
+	}
+
+	chain := b.Chain
+	chain = append(chain, statement)
+	return OffsetChain(chain)
+}
+
+func (b ChainBuilder) Limit(limit int64) LimitChain {
+	statement := LimitStatement{
+		Limit: limit,
+	}
+
+	chain := b.Chain
+	chain = append(chain, statement)
+	return LimitChain(chain)
+}

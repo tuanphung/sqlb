@@ -43,3 +43,19 @@ func (s WhereStatement) ToExpr() (string, []interface{}, error) {
 	sql = fmt.Sprintf("WHERE %s", sql)
 	return sql, args, err
 }
+
+type LimitStatement struct {
+	Limit int64
+}
+
+func (s LimitStatement) ToExpr() (string, []interface{}, error) {
+	return fmt.Sprintf("LIMIT %d", s.Limit), nil, nil
+}
+
+type OffsetStatement struct {
+	Offset int64
+}
+
+func (s OffsetStatement) ToExpr() (string, []interface{}, error) {
+	return fmt.Sprintf("OFFSET %d", s.Offset), nil, nil
+}
