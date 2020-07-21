@@ -1,5 +1,7 @@
 language: go
 
-# run tests w/ coverage
+go:
+  - "1.13.x"
+
 script:
   - go test -v ./...
