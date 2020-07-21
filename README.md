@@ -15,27 +15,24 @@ import "github.com/Masterminds/squirrel"
 ```
 
 ## Usages
+```go
+import sb "github.com/tuanphung/sqlb"
+```
 
 #### Most popular statement
 ```go
-import sb "github.com/tuanphung/sqlb"
-
 sql, args, err := sb.Select("id", "name").From("user").Where(sb.Eq{"id", 1}).ToExpr()
 // SELECT id, name FROM user WHERE id = 1
 ```
 
 #### A complex statement
 ```go
-import sb "github.com/tuanphung/sqlb"
-
 sql, args, err := sb.Select("id", "name").From("user").Where(Or{Eq{"foo", "bar"}, Eq{"id", 1}}).Offset(0).Limit(10).ToExpr()
 // SELECT id, name FROM user WHERE (foo = 'bar' OR id = 1) LIMIT 10
 ```
 
 #### Not enough statement? Use Raw
 ```go
-import sb "github.com/tuanphung/sqlb"
-
 sql, args, err := sb.Raw("EXPLAIN").Select("id", "name").From("user").Where(Or{Eq{"foo", "bar"}, Eq{"id", 1}}).Offset(0).Limit(10).ToExpr()
 // EXPLAIN SELECT id, name FROM user WHERE (foo = 'bar' OR id = 1) LIMIT 10
 ```
