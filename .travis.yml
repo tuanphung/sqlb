@@ -1,0 +1,5 @@
+language: go
+
+# run tests w/ coverage
+script:
+  - go test -v ./...
