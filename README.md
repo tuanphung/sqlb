@@ -1,7 +1,7 @@
 # sqlb
 [![Build Status](https://travis-ci.org/tuanphung/sqlb.svg?branch=master)](https://travis-ci.org/tuanphubg/sqlb) [![Coverage Status](https://coveralls.io/repos/github/tuanphung/sqlb/badge.svg)](https://coveralls.io/github/tuanphung/sqlb)
 
-A lightweight package which provides an convenience way for you to construct SQL statements. We focus on producing SQL statement with arguments and leave it to you to decide how execution will be, you can either use the standard `database/sql` or `sqlx`.
+A lightweight package which provides an convenience way for you to construct SQL statements. The main focus is producing SQL statement with arguments, we leave you to decide how to execute the statement, either use the standard `database/sql` or `sqlx` or any existing library in your codebase.
 
 ## Features
 * Support most common SQL statements (SELECT, FROM, WHERE, HAVING, ORDER BY, LIMIT, OFFSET, etc...).
