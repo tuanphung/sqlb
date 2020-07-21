@@ -11,13 +11,10 @@ A lightweight package which provides an convenience way for you to construct SQL
 
 ## Installation
 ```go
-import "github.com/Masterminds/squirrel"
+import sb "github.com/tuanphung/sqlb"
 ```
 
 ## Usages
-```go
-import sb "github.com/tuanphung/sqlb"
-```
 
 #### Most popular statement
 ```go
