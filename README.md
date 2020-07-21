@@ -25,7 +25,7 @@ sql, args, err := sb.Select("id", "name").From("user").Where(sb.Eq{"id", 1}).ToE
 // SELECT id, name FROM user WHERE id = 1
 ```
 
-#### A complex statement
+#### A bit more complex statement
 ```go
 sql, args, err := sb.Select("id", "name").From("user").Where(sb.Or{sb.Eq{"foo", "bar"}, sb.Eq{"id", 1}}).Offset(0).Limit(10).ToExpr()
 
