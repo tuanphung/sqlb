@@ -1,6 +1,9 @@
 package sqlb
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 type Chain []Statement
 
@@ -16,15 +19,41 @@ func (c Chain) ToExpr() (string, []interface{}, error) {
 		}
 	}
 
-	if len(parts) == 0 {
-		return "", aggregatedArgs, nil
+	sql := ""
+	if len(parts) > 0 {
+		sql = strings.Join(parts, " ")
 	}
 
-	if len(parts) == 1 {
-		return parts[0], aggregatedArgs, nil
+	// Rebind argument placeholder
+	sql = rebind(GetPlaceholder(), sql)
+
+	return sql, aggregatedArgs, nil
+}
+
+func rebind(placeholder PlaceholderType, sql string) string {
+	switch placeholder {
+	case Question:
+		return sql
 	}
 
-	return strings.Join(parts, " "), aggregatedArgs, nil
+	chunks := []byte{}
+	var i, j int
+
+	for i = strings.Index(sql, "?"); i != -1; i = strings.Index(sql, "?") {
+		chunks = append(chunks, sql[:i]...)
+
+		switch placeholder {
+		case Dollar:
+			chunks = append(chunks, '$')
+		}
+
+		j++
+		chunks = strconv.AppendInt(chunks, int64(j), 10)
+
+		sql = sql[i+1:]
+	}
+
+	return string(append(chunks, sql...))
 }
 
 type ChainBuilder struct {
@@ -90,4 +119,13 @@ func (b ChainBuilder) Limit(limit int64) LimitChain {
 	chain := b.Chain
 	chain = append(chain, statement)
 	return LimitChain(chain)
+}
+
+// Convenience methods to initialize statement chain
+func Raw(value string, args ...interface{}) RawChain {
+	return ChainBuilder{}.Raw(value, args...)
+}
+
+func Select(columns ...string) SelectChain {
+	return ChainBuilder{}.Select(columns...)
 }

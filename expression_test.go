@@ -37,6 +37,14 @@ func TestAnd(t *testing.T) {
 	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
 }
 
+func TestLike(t *testing.T) {
+	e := And{Like{"foo", "bar"}}
+
+	sql, args, _ := e.ToExpr()
+	assert.Equal(t, "foo LIKE ?", sql, "they should be equal")
+	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
+}
+
 func TestEmptyExpr(t *testing.T) {
 	e := And{}
 
