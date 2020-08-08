@@ -43,6 +43,19 @@ sql, args, err := sb.Raw("EXPLAIN").Select("id", "name").From("user").Where(sb.O
 // EXPLAIN SELECT id, name FROM user WHERE (foo = 'bar' OR id = 1) LIMIT 10
 ```
 
+#### Rebind argument placeholder
+The library use `?` as default argument placeholder. We love Postgresql, so we support rebinding with `$`.
+```go
+// Globally set placeholder to `$`
+sb.SetPlaceholder(sb.Dollar)
+
+sql, args, err := sb.Raw("EXPLAIN").Select("id", "name").From("user").Where(sb.Or{sb.Eq{"foo", "bar"}, sb.Eq{"id", 1}}).Offset(0).Limit(10).ToExpr()
+
+// sql: EXPLAIN SELECT id, name FROM user WHERE (foo = $1 OR id = $2) LIMIT 10
+// args: ['bar', 1]
+// EXPLAIN SELECT id, name FROM user WHERE (foo = 'bar' OR id = 1) LIMIT 10
+```
+
 ## FAQs
 
 ## License
