@@ -15,6 +15,10 @@ type RawStatement struct {
 }
 
 func (s RawStatement) ToExpr() (string, []interface{}, error) {
+	if len(s.Args) == 0 {
+		return s.Raw, s.Args, nil
+	}
+
 	return s.Raw, s.Args, nil
 }
 
