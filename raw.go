@@ -7,7 +7,7 @@ func (c RawChain) ToExpr() (string, []interface{}, error) {
 }
 
 func (c RawChain) Raw(raw string, args ...interface{}) RawChain {
-	return ChainBuilder{Chain(c)}.Raw(raw, args)
+	return ChainBuilder{Chain(c)}.Raw(raw, args...)
 }
 
 func (c RawChain) Select(columns ...string) SelectChain {

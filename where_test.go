@@ -11,7 +11,7 @@ func TestBasicWhereChain(t *testing.T) {
 		Exprs: []Expr{
 			Eq{
 				Column: "foo",
-				Value: "bar",
+				Value:  "bar",
 			},
 		},
 	}
@@ -28,7 +28,7 @@ func TestWhereChainWithOffset(t *testing.T) {
 		Exprs: []Expr{
 			Eq{
 				Column: "foo",
-				Value: "bar",
+				Value:  "bar",
 			},
 		},
 	}
@@ -45,7 +45,7 @@ func TestWhereChainWithLimit(t *testing.T) {
 		Exprs: []Expr{
 			Eq{
 				Column: "foo",
-				Value: "bar",
+				Value:  "bar",
 			},
 		},
 	}
@@ -53,6 +53,23 @@ func TestWhereChainWithLimit(t *testing.T) {
 	chain := WhereChain([]Statement{statement}).Limit(10)
 	expr, args, err := chain.ToExpr()
 	assert.Equal(t, "WHERE foo = ? LIMIT 10", expr, "they should be equal")
+	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
+	assert.Equal(t, nil, err, "they should be equal")
+}
+
+func TestWhereChainWithRaw(t *testing.T) {
+	statement := WhereStatement{
+		Exprs: []Expr{
+			Eq{
+				Column: "foo",
+				Value:  "bar",
+			},
+		},
+	}
+
+	chain := WhereChain([]Statement{statement}).Raw("ORDER BY a")
+	expr, args, err := chain.ToExpr()
+	assert.Equal(t, "WHERE foo = ? ORDER BY a", expr, "they should be equal")
 	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
 }

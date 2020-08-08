@@ -7,7 +7,7 @@ func (c WhereChain) ToExpr() (string, []interface{}, error) {
 }
 
 func (c WhereChain) Raw(raw string, args ...interface{}) RawChain {
-	return ChainBuilder{Chain(c)}.Raw(raw, args)
+	return ChainBuilder{Chain(c)}.Raw(raw, args...)
 }
 
 func (c WhereChain) Limit(limit int64) LimitChain {
