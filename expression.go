@@ -74,6 +74,20 @@ func (e In) ToExpr() (string, []interface{}, error) {
 	return fmt.Sprintf("%s IN (%s)", e.Column, strings.Join(placeholders, ",")), e.Value, nil
 }
 
+type Order struct {
+	Column     string
+	Descending bool
+}
+
+func (e Order) ToExpr() (string, []interface{}, error) {
+	order := "ASC"
+	if e.Descending {
+		order = "DESC"
+	}
+
+	return fmt.Sprintf("%s %s", e.Column, order), nil, nil
+}
+
 type ConjunctionOperator string
 
 const (

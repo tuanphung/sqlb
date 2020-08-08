@@ -63,3 +63,17 @@ type OffsetStatement struct {
 func (s OffsetStatement) ToExpr() (string, []interface{}, error) {
 	return fmt.Sprintf("OFFSET %d", s.Offset), nil, nil
 }
+
+type OrderByStatement struct {
+	Orders []Order
+}
+
+func (s OrderByStatement) ToExpr() (string, []interface{}, error) {
+	exprs := []string{}
+	for _, order := range s.Orders {
+		expr, _, _ := order.ToExpr()
+		exprs = append(exprs, expr)
+	}
+
+	return fmt.Sprintf("ORDER BY %s", strings.Join(exprs, ",")), nil, nil
+}

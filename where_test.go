@@ -73,3 +73,20 @@ func TestWhereChainWithRaw(t *testing.T) {
 	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
 	assert.Equal(t, nil, err, "they should be equal")
 }
+
+func TestWhereChainWithOrderBy(t *testing.T) {
+	statement := WhereStatement{
+		Exprs: []Expr{
+			Eq{
+				Column: "foo",
+				Value:  "bar",
+			},
+		},
+	}
+
+	chain := WhereChain([]Statement{statement}).OrderBy(Order{"foo", false})
+	expr, args, err := chain.ToExpr()
+	assert.Equal(t, "WHERE foo = ? ORDER BY foo ASC", expr, "they should be equal")
+	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
+	assert.Equal(t, nil, err, "they should be equal")
+}

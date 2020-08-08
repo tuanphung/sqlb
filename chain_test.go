@@ -69,6 +69,15 @@ func TestChainBuilderWithLimit(t *testing.T) {
 	assert.Equal(t, nil, err, "they should be equal")
 }
 
+func TestChainBuilderWithOrderBy(t *testing.T) {
+	chain := ChainBuilder{}.OrderBy(Order{"foo", false})
+
+	sql, args, err := chain.ToExpr()
+	assert.Equal(t, "ORDER BY foo ASC", sql, "they should be equal")
+	assert.Equal(t, 0, len(args), "they should be equal")
+	assert.Equal(t, nil, err, "they should be equal")
+}
+
 func TestSelect(t *testing.T) {
 	sql, args, _ := Select("id", "name", "abc").ToExpr()
 	assert.Equal(t, "SELECT id, name, abc", sql, "they should be equal")

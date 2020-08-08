@@ -17,3 +17,7 @@ func (c WhereChain) Limit(limit int64) LimitChain {
 func (c WhereChain) Offset(offset int64) OffsetChain {
 	return ChainBuilder{Chain(c)}.Offset(offset)
 }
+
+func (c WhereChain) OrderBy(orders ...Order) OrderByChain {
+	return ChainBuilder{Chain(c)}.OrderBy(orders...)
+}

@@ -121,6 +121,16 @@ func (b ChainBuilder) Limit(limit int64) LimitChain {
 	return LimitChain(chain)
 }
 
+func (b ChainBuilder) OrderBy(orders ...Order) OrderByChain {
+	statement := OrderByStatement{
+		Orders: orders,
+	}
+
+	chain := b.Chain
+	chain = append(chain, statement)
+	return OrderByChain(chain)
+}
+
 // Convenience methods to initialize statement chain
 func Raw(value string, args ...interface{}) RawChain {
 	return ChainBuilder{}.Raw(value, args...)
