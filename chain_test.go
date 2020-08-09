@@ -6,6 +6,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestRebindSQL(t *testing.T) {
+	sql := "SELECT * FROM table where foo = ? AND bar = ?"
+
+	SetPlaceholder(Dollar)
+	assert.Equal(t, "SELECT * FROM table where foo = $1 AND bar = $2", Rebind(sql), "they should be equal")
+}
+
 func TestChainBuilderWithEmpty(t *testing.T) {
 	chain := ChainBuilder{}.Chain
 

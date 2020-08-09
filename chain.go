@@ -30,6 +30,10 @@ func (c Chain) ToExpr() (string, []interface{}, error) {
 	return sql, aggregatedArgs, nil
 }
 
+func Rebind(sql string) string {
+	return rebind(GetPlaceholder(), sql)
+}
+
 func rebind(placeholder PlaceholderType, sql string) string {
 	switch placeholder {
 	case Question:
