@@ -11,6 +11,8 @@ func TestRebindSQL(t *testing.T) {
 
 	SetPlaceholder(Dollar)
 	assert.Equal(t, "SELECT * FROM table where foo = $1 AND bar = $2", Rebind(sql), "they should be equal")
+
+	SetPlaceholder(Question)
 }
 
 func TestChainBuilderWithEmpty(t *testing.T) {
