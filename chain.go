@@ -54,6 +54,10 @@ func (c Chain) Offset(offset int64) Chain {
 	return ChainBuilder{c}.Offset(offset)
 }
 
+func (c Chain) OrderBy(orders ...Order) Chain {
+	return ChainBuilder{c}.OrderBy(orders...)
+}
+
 func Rebind(sql string) string {
 	return rebind(GetPlaceholder(), sql)
 }
