@@ -162,12 +162,3 @@ func (b ChainBuilder) OrderBy(orders ...Order) Chain {
 	chain = append(chain, statement)
 	return chain
 }
-
-// Convenience methods to initialize statement chain
-func Raw(value string, args ...interface{}) Chain {
-	return ChainBuilder{}.Raw(value, args...)
-}
-
-func Select(columns ...string) Chain {
-	return ChainBuilder{}.Select(columns...)
-}
