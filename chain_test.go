@@ -140,3 +140,14 @@ func TestUsage1(t *testing.T) {
 	assert.Equal(t, "EXPLAIN SELECT id, name, abc FROM table WHERE (foo = ? OR a = ?) OFFSET 0 LIMIT 10", sql, "they should be equal")
 	assert.Equal(t, []interface{}{"bar", "b"}, args, "they should be equal")
 }
+
+func TestAppendChain(t *testing.T) {
+	chain1 := From("table").Where(Eq{"foo", "bar"})
+
+	chain2 := Select("*")
+
+	finalChain := chain2.Append(chain1)
+	sql, args, _ := finalChain.ToExpr()
+	assert.Equal(t, "SELECT * FROM table WHERE foo = ?", sql, "they should be equal")
+	assert.Equal(t, []interface{}{"bar"}, args, "they should be equal")
+}

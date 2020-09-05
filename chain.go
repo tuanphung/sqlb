@@ -30,6 +30,10 @@ func (c Chain) ToExpr() (string, []interface{}, error) {
 	return sql, aggregatedArgs, nil
 }
 
+func (c Chain) Append(chain Chain) Chain {
+	return ChainBuilder{c}.Append(chain)
+}
+
 func (c Chain) Raw(raw string, args ...interface{}) Chain {
 	return ChainBuilder{c}.Raw(raw, args...)
 }
@@ -90,6 +94,12 @@ func rebind(placeholder PlaceholderType, sql string) string {
 
 type ChainBuilder struct {
 	Chain Chain
+}
+
+func (b ChainBuilder) Append(c Chain) Chain {
+	chain := b.Chain
+	chain = append(chain, c...)
+	return chain
 }
 
 func (b ChainBuilder) Raw(raw string, args ...interface{}) Chain {
