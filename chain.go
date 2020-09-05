@@ -30,6 +30,30 @@ func (c Chain) ToExpr() (string, []interface{}, error) {
 	return sql, aggregatedArgs, nil
 }
 
+func (c Chain) Raw(raw string, args ...interface{}) Chain {
+	return ChainBuilder{c}.Raw(raw, args...)
+}
+
+func (c Chain) Select(columns ...string) Chain {
+	return ChainBuilder{c}.Select(columns...)
+}
+
+func (c Chain) From(tables ...string) Chain {
+	return ChainBuilder{c}.From(tables...)
+}
+
+func (c Chain) Where(parts ...Expr) Chain {
+	return ChainBuilder{c}.Where(parts...)
+}
+
+func (c Chain) Limit(limit int64) Chain {
+	return ChainBuilder{c}.Limit(limit)
+}
+
+func (c Chain) Offset(offset int64) Chain {
+	return ChainBuilder{c}.Offset(offset)
+}
+
 func Rebind(sql string) string {
 	return rebind(GetPlaceholder(), sql)
 }
@@ -64,7 +88,7 @@ type ChainBuilder struct {
 	Chain Chain
 }
 
-func (b ChainBuilder) Raw(raw string, args ...interface{}) RawChain {
+func (b ChainBuilder) Raw(raw string, args ...interface{}) Chain {
 	statement := RawStatement{
 		Raw:  raw,
 		Args: args,
@@ -72,74 +96,74 @@ func (b ChainBuilder) Raw(raw string, args ...interface{}) RawChain {
 
 	chain := b.Chain
 	chain = append(chain, statement)
-	return RawChain(chain)
+	return chain
 }
 
-func (b ChainBuilder) Select(columns ...string) SelectChain {
+func (b ChainBuilder) Select(columns ...string) Chain {
 	statement := SelectStatement{
 		Columns: columns,
 	}
 
 	chain := b.Chain
 	chain = append(chain, statement)
-	return SelectChain(chain)
+	return chain
 }
 
-func (b ChainBuilder) From(tables ...string) FromChain {
+func (b ChainBuilder) From(tables ...string) Chain {
 	statement := FromStatement{
 		Tables: tables,
 	}
 
 	chain := b.Chain
 	chain = append(chain, statement)
-	return FromChain(chain)
+	return chain
 }
 
-func (b ChainBuilder) Where(exprs ...Expr) WhereChain {
+func (b ChainBuilder) Where(exprs ...Expr) Chain {
 	statement := WhereStatement{
 		Exprs: exprs,
 	}
 
 	chain := b.Chain
 	chain = append(chain, statement)
-	return WhereChain(chain)
+	return chain
 }
 
-func (b ChainBuilder) Offset(offset int64) OffsetChain {
+func (b ChainBuilder) Offset(offset int64) Chain {
 	statement := OffsetStatement{
 		Offset: offset,
 	}
 
 	chain := b.Chain
 	chain = append(chain, statement)
-	return OffsetChain(chain)
+	return chain
 }
 
-func (b ChainBuilder) Limit(limit int64) LimitChain {
+func (b ChainBuilder) Limit(limit int64) Chain {
 	statement := LimitStatement{
 		Limit: limit,
 	}
 
 	chain := b.Chain
 	chain = append(chain, statement)
-	return LimitChain(chain)
+	return chain
 }
 
-func (b ChainBuilder) OrderBy(orders ...Order) OrderByChain {
+func (b ChainBuilder) OrderBy(orders ...Order) Chain {
 	statement := OrderByStatement{
 		Orders: orders,
 	}
 
 	chain := b.Chain
 	chain = append(chain, statement)
-	return OrderByChain(chain)
+	return chain
 }
 
 // Convenience methods to initialize statement chain
-func Raw(value string, args ...interface{}) RawChain {
+func Raw(value string, args ...interface{}) Chain {
 	return ChainBuilder{}.Raw(value, args...)
 }
 
-func Select(columns ...string) SelectChain {
+func Select(columns ...string) Chain {
 	return ChainBuilder{}.Select(columns...)
 }

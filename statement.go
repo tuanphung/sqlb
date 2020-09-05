@@ -44,6 +44,10 @@ type WhereStatement struct {
 
 func (s WhereStatement) ToExpr() (string, []interface{}, error) {
 	sql, args, err := And(s.Exprs).ToExpr()
+	if sql == "" {
+		return "", nil, nil
+	}
+
 	sql = fmt.Sprintf("WHERE %s", sql)
 	return sql, args, err
 }
