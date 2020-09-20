@@ -77,6 +77,9 @@ func (e In) ToExpr() (string, []interface{}, error) {
 type Order struct {
 	Column     string
 	Descending bool
+
+	// Flag to specific null order for Postgresql
+	IsPQNullsLast *bool
 }
 
 func (e Order) ToExpr() (string, []interface{}, error) {
@@ -85,7 +88,19 @@ func (e Order) ToExpr() (string, []interface{}, error) {
 		order = "DESC"
 	}
 
-	return fmt.Sprintf("%s %s", e.Column, order), nil, nil
+	sql := fmt.Sprintf("%s %s", e.Column, order)
+	if e.IsPQNullsLast != nil {
+		var nullsOrder string
+		if *e.IsPQNullsLast {
+			nullsOrder = "NULLS LAST"
+		} else {
+			nullsOrder = "NULLS FIRST"
+		}
+
+		sql = sql + " " + nullsOrder
+	}
+
+	return sql, nil, nil
 }
 
 type ConjunctionOperator string
